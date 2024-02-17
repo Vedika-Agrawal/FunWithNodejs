@@ -32,7 +32,37 @@ switch(command){
 }
 
 function treeFn(dirPath){
-    console.log("Tree command implemented for ", dirPath);
+    if(dirPath==undefined){
+        console.log("Please enter the path"); return ;
+    }
+    else{
+        if(fs.existsSync(dirPath)){
+            treeHelper(dirPath, "");
+        }
+        else{
+            console.log("Please enter the correct path");
+            return ;
+        }
+    }
+}
+
+function treeHelper(dirPath, indent) {
+    // is file or folder
+    let isFile = fs.lstatSync(dirPath).isFile();
+    if (isFile == true) {
+        let fileName = path.basename(dirPath);
+        console.log(indent + "├──" + fileName);
+    } else {
+        let dirName = path.basename(dirPath)
+        console.log(indent + "└──" + dirName);
+        let childrens = fs.readdirSync(dirPath);
+        for (let i = 0; i < childrens.length; i++) {
+            let childPath = path.join(dirPath, childrens[i]);
+            treeHelper(childPath, indent + "\t");
+        }
+    }
+
+
 }
 function organizeFn(dirPath){
     // 1. intput of idrectory 
